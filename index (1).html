@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study Buddy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F6FA;--ink:#171A2B;--card:#fff;--line:#E3E6EF;--muted:#667085;--acc:#4338CA;--accsoft:#EEF0FF}
+@media (prefers-color-scheme:dark){:root{--bg:#10121C;--ink:#ECEEF8;--card:#191C2B;--line:#2A2E44;--muted:#98A0B8;--acc:#8B93FF;--accsoft:#222645}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:15px;line-height:1.45;padding:20px 16px 96px;max-width:640px;margin:0 auto}
+h1{font-size:28px;margin:6px 0 2px;font-weight:700;letter-spacing:-.02em}
+h2{font-size:15px;margin:26px 0 10px;font-weight:600;color:var(--muted)}
+.sub{color:var(--muted);margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 2px rgba(16,18,40,.05);padding:13px 15px;margin-bottom:10px}
+.stats{display:flex;gap:10px}
+.stat{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.stat b{display:block;font-size:26px;line-height:1.15;font-weight:700;color:var(--acc)}
+.stat span{font-size:12.5px;color:var(--muted)}
+.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;transition:width .4s}
+.row{display:flex;align-items:center;gap:12px}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.grow{flex:1;min-width:0}
+.t{font-weight:600}
+.m{font-size:13px;color:var(--muted)}
+.chk{appearance:none;-webkit-appearance:none;width:24px;height:24px;border:2px solid var(--line);border-radius:7px;background:var(--card);flex:none;display:grid;place-content:center;cursor:pointer;margin:0;transition:background .15s,border-color .15s}
+.chk:checked{background:var(--acc);border-color:var(--acc)}
+.chk:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.chk:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.done .t{text-decoration:line-through;opacity:.55}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);border-radius:99px;padding:6px 13px;font:inherit;font-size:13.5px;font-weight:500;background:var(--card);color:var(--ink);cursor:pointer}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.day.today{border-color:var(--acc);background:var(--accsoft)}
+.slot{display:flex;gap:12px;padding:5px 0;align-items:center}
+.time{width:96px;flex:none;font-size:13px;color:var(--muted)}
+.pill{flex:1;border-radius:8px;padding:6px 11px;font-weight:600;font-size:14px}
+.free{color:var(--muted);font-size:14px}
+details.card summary{list-style:none;cursor:pointer}
+details.card summary::-webkit-details-marker{display:none}
+.topics{margin-top:12px}
+.tp{display:flex;align-items:center;gap:12px;padding:8px 0;border-top:1px solid var(--line)}
+.x{background:none;border:0;font-size:16px;color:var(--muted);cursor:pointer;padding:4px 8px}
+.add{display:flex;gap:8px;margin-top:10px}
+.add input{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;background:var(--bg);color:var(--ink)}
+.btn{border:0;border-radius:10px;background:var(--acc);color:#fff;font:inherit;font-weight:600;padding:9px 16px;cursor:pointer}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:6px;padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--line)}
+nav button{flex:1;max-width:200px;border:0;border-radius:10px;padding:10px 4px;font:inherit;font-weight:600;font-size:14px;background:none;color:var(--muted);cursor:pointer}
+nav button[aria-current=true]{background:var(--accsoft);color:var(--acc)}
+textarea{width:100%;margin-top:6px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;background:var(--bg);color:var(--ink);resize:vertical}
+.btn.ghost{background:var(--accsoft);color:var(--acc);margin-top:8px}
+.btn.danger{background:none;color:#E5484D;padding:6px 0;margin-top:10px}
+.star.on{color:#F5A300}
+.newc{display:flex;gap:8px;flex-wrap:wrap}
+.newc input{flex:1;min-width:120px;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;background:var(--bg);color:var(--ink)}
+.num{flex:none;min-width:26px;height:26px;border-radius:8px;background:var(--accsoft);color:var(--acc);font-size:13px;font-weight:700;display:grid;place-content:center}
+.sub-row{display:flex;gap:10px;align-items:flex-start;padding:5px 0 5px 36px;font-size:14px}
+.sub-row .chk{width:20px;height:20px;border-radius:6px;margin-top:1px}
+.sub-row .chk:checked::after{width:5px;height:9px;border-width:0 2px 2px 0}
+.sub-row .n{flex:none;min-width:30px;color:var(--muted);font-size:12.5px;padding-top:2px}
+canvas{display:none}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<nav>
+  <button data-tab="today">Today</button>
+  <button data-tab="timetable">Timetable</button>
+  <button data-tab="courses">Courses</button>
+</nav>
+<canvas id="fx"></canvas>
+<script>
+/* ===== Your data: edit courses and classes here ===== */
+const COURSES=[
+ {c:"MTH 201",n:"Mathematical Methods I",u:2},
+ {c:"COS 201",n:"Computer Programming I",u:3},
+ {c:"SEN 201",n:"Introduction to Software Engineering",u:2},
+ {c:"CSC 203",n:"Discrete Structures",u:2},
+ {c:"IFT 211",n:"Digital Logic Design",u:2},
+ {c:"ENT 211",n:"Entrepreneurship and Innovation",u:2},
+ {c:"FUTES-SEN 203",n:"Software Requirements Engineering",u:2},
+ {c:"FUTES-CSC 207",n:"Foundations of Computer Networks",u:2},
+ {c:"FUTES-SEN 207",n:"Critical Thinking (elective)",u:1},
+ {c:"FUTES-IFT 203",n:"Introduction to Web Technologies",u:2},
+ {c:"GST 103",n:"Eng. & Comp.",u:null}
+];
+// day: 0=Sun ... 6=Sat. Times in 24h.
+const CLASSES=[
+ {d:1,s:9,e:10,c:"FUTES-CSC 207"},
+ {d:1,s:16,e:17,c:"ENT 211"},
+ {d:3,s:8,e:10,c:"FUTES-IFT 203"},
+ {d:3,s:11,e:12,c:"FUTES-SEN 203"},
+ {d:3,s:12,e:13,c:"SEN 201"},
+ {d:3,s:13,e:14,c:"IFT 211"},
+ {d:3,s:14,e:15,c:"COS 201"},
+ {d:3,s:15,e:17,c:"GST 103"},
+ {d:4,s:13,e:15,c:"CSC 203"},
+ {d:5,s:8,e:10,c:"MTH 201"},
+ {d:5,s:10,e:11,c:"FUTES-SEN 207"}
+];
+const DAYS=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const COLORS=["#E5484D","#3E63DD","#30A46C","#F76B15","#8E4EC6","#12A594"];
+const col=c=>COLORS[COURSES.findIndex(x=>x.c===c)%COLORS.length];
+
+/* ===== Saved on this device ===== */
+const KEY="study-buddy-v1";
+let S={topics:{},log:{},syllabus:{},extra:[],tab:"today",open:null};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+S.extra.forEach(c=>COURSES.push(c));
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const dkey=d=>d.toLocaleDateString("en-CA");
+const hr=h=>{const x=h%12||12;return x+(h<12?"am":"pm")};
+const today=()=>dkey(new Date());
+const studied=(k)=>S.log[k]||[];
+function streak(){
+  let d=new Date(),n=0;
+  if(!studied(dkey(d)).length)d.setDate(d.getDate()-1);
+  while(studied(dkey(d)).length){n++;d.setDate(d.getDate()-1)}
+  return n;
+}
+function units(c){let d=0,t=0;(S.topics[c]||[]).forEach(x=>{const u=x.subs||[];if(u.length){t+=u.length;d+=u.filter(y=>y.d).length}else{t++;if(x.d)d++}});return{d,t}}
+function progress(c){const u=units(c);return u.t?Math.round(u.d/u.t*100):0}
+
+/* ===== Views ===== */
+function viewToday(){
+  const now=new Date(),dow=now.getDay(),k=dkey(now);
+  const todays=CLASSES.filter(x=>x.d===dow).sort((a,b)=>a.s-b.s);
+  const codes=[...new Set(todays.map(x=>x.c))];
+  const got=codes.filter(c=>studied(k).includes(c)).length;
+  let od=0,ot=0;COURSES.forEach(c=>{const u=units(c.c);od+=u.d;ot+=u.t});const overall=ot?Math.round(od/ot*100):0;
+  let h=`<h1>${DAYS[dow]}</h1><p class="sub">${now.toLocaleDateString("en-GB",{day:"numeric",month:"long"})} · ${codes.length?"Tick each subject once you've studied it.":"No classes today."}</p>
+  <div class="stats">
+    <div class="stat"><b>${streak()}</b><span>day streak</span></div>
+    <div class="stat"><b>${got}/${codes.length}</b><span>studied today</span></div>
+    <div class="stat"><b>${overall}%</b><span>topics read</span></div>
+  </div>`;
+  const focus=[];COURSES.forEach(c=>(S.topics[c.c]||[]).forEach((x,i)=>{if(x.f&&!x.d)focus.push({c:c.c,x,n:i+1})}));
+  if(focus.length){h+=`<h2>Focus topics</h2>`;focus.forEach(f=>{h+=`<label class="card row"><span class="dot" style="background:${col(f.c)}"></span><input class="chk" type="checkbox" data-topic="${f.x.id}" data-c="${esc(f.c)}" aria-label="Read ${esc(f.x.t)}"><span class="num">${f.n}</span><div class="grow"><div class="t">${esc(f.x.t)}</div><div class="m">${esc(f.c)}</div></div></label>`})}
+  if(codes.length){
+    h+=`<h2>Today's classes</h2>`;
+    todays.forEach(x=>{
+      const on=studied(k).includes(x.c),cr=COURSES.find(y=>y.c===x.c);
+      h+=`<label class="card row ${on?"done":""}">
+        <span class="dot" style="background:${col(x.c)}"></span><input class="chk" type="checkbox" data-study="${esc(x.c)}" ${on?"checked":""} aria-label="Studied ${esc(x.c)}">
+        <div class="grow"><div class="t">${esc(x.c)}</div><div class="m">${hr(x.s)} – ${hr(x.e)} · ${esc(cr.n)}</div></div></label>`;
+    });
+  }
+  const others=COURSES.filter(c=>!codes.includes(c.c));
+  h+=`<h2>${codes.length?"Studied something else?":"What did you study?"}</h2><div class="chips">`+
+    others.map(c=>`<button class="chip ${studied(k).includes(c.c)?"on":""}" data-study="${esc(c.c)}">${esc(c.c)}</button>`).join("")+`</div>`;
+  return h;
+}
+function viewTimetable(){
+  const dow=new Date().getDay();
+  let h=`<h1>Timetable</h1><p class="sub">Your week at a glance.</p>`;
+  [1,2,3,4,5,6].forEach(d=>{
+    const list=CLASSES.filter(x=>x.d===d).sort((a,b)=>a.s-b.s);
+    h+=`<div class="card day ${d===dow?"today":""}"><div class="t">${DAYS[d]}${d===dow?" (today)":""}</div>`;
+    if(!list.length)h+=`<div class="free">Free day</div>`;
+    list.forEach(x=>{h+=`<div class="slot"><div class="time">${hr(x.s)} – ${hr(x.e)}</div><div class="pill" style="background:${col(x.c)}1f;border-left:3px solid ${col(x.c)}">${esc(x.c)}</div></div>`});
+    h+=`</div>`;
+  });
+  return h;
+}
+function viewCourses(){
+  let h=`<h1>Courses</h1><p class="sub">Add topics, then tick them as you read.</p>`;
+  COURSES.forEach(c=>{
+    const t=S.topics[c.c]||[],p=progress(c.c);
+    h+=`<details class="card" data-course="${esc(c.c)}" ${S.open===c.c?"open":""}>
+      <summary><div class="row"><span class="dot" style="background:${col(c.c)}"></span>
+        <div class="grow"><div class="t">${esc(c.c)}</div><div class="m">${esc(c.n)}${c.u?` · ${c.u} unit${c.u>1?"s":""}`:""}</div></div>
+        <b>${p}%</b></div>
+        <div class="bar" style="margin-top:10px"><i style="width:${p}%;background:${col(c.c)}"></i></div></summary>
+      <div class="topics">`;
+    if(!t.length)h+=`<div class="free">No topics yet. Add the first one below.</div>`;
+    t.forEach((x,i)=>{const sb=(x.subs||[]).map((u,j)=>`<div class="sub-row ${u.d?"done":""}"><input class="chk" type="checkbox" data-sub="${u.id}" data-p="${x.id}" data-c="${esc(c.c)}" ${u.d?"checked":""} aria-label="Read ${esc(u.t)}"><span class="n">${i+1}.${j+1}</span><div class="grow t" style="font-weight:500">${esc(u.t)}</div></div>`).join("");h+=`<div class="tp ${x.d?"done":""}"><input class="chk" type="checkbox" data-topic="${x.id}" data-c="${esc(c.c)}" ${x.d?"checked":""} aria-label="Read ${esc(x.t)}">
+      <span class="num">${i+1}</span><div class="grow t">${esc(x.t)}</div><button class="x star ${x.f?"on":""}" data-star="${x.id}" data-c="${esc(c.c)}" aria-label="${x.f?"Remove focus":"Focus on this topic"}">${x.f?"★":"☆"}</button><button class="x" data-del="${x.id}" data-c="${esc(c.c)}" aria-label="Delete topic">✕</button></div>${sb}`});
+    h+=`<div class="add"><input placeholder="New topic, e.g. Chapter 1" data-new="${esc(c.c)}" maxlength="80"><button class="btn" data-add="${esc(c.c)}">Add topic</button></div>
+      ${t.length?`<div class="m" style="margin-top:14px">Focus on topic numbers</div><div class="add"><input data-fnum="${esc(c.c)}" placeholder="e.g. 1, 3, 5-7" inputmode="text"><button class="btn ghost" style="margin:0" data-fset="${esc(c.c)}">Set focus</button></div>`:""}
+      <div class="m" style="margin-top:16px">Syllabus / outline</div>
+      <textarea rows="5" data-syl="${esc(c.c)}" placeholder="Paste your syllabus. Numbered lines (1. 2. 3.) become topics and the lines under each become its subtopics.">${esc(S.syllabus[c.c]||"")}</textarea>
+      <button class="btn ghost" data-split="${esc(c.c)}">Turn syllabus into topics</button> <button class="btn danger" style="margin-left:14px" data-clr="${esc(c.c)}">Clear topics</button>
+      ${c.custom?`<br><button class="btn danger" data-rm="${esc(c.c)}">Remove this course</button>`:""}
+      </div></details>`;
+  });
+  h+=`<h2>Add a course</h2><div class="card newc"><input data-nc-code placeholder="Code, e.g. PHY 101" maxlength="20"><input data-nc-name placeholder="Course title" maxlength="60"><button class="btn" data-addcourse="">Add course</button></div>`;
+  return h;
+}
+function render(){
+  document.getElementById("app").innerHTML=S.tab==="today"?viewToday():S.tab==="timetable"?viewTimetable():viewCourses();
+  document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.tab===S.tab));
+}
+
+/* ===== Actions ===== */
+function toggleStudy(c){
+  const k=today(),a=studied(k);
+  S.log[k]=a.includes(c)?a.filter(x=>x!==c):[...a,c];
+  const on=S.log[k].includes(c);save();render();if(on)burst();
+}
+function addTopic(c){
+  const inp=document.querySelector(`[data-new="${CSS.escape(c)}"]`),v=inp.value.trim();
+  if(!v)return;
+  (S.topics[c]=S.topics[c]||[]).push({id:uid(),t:v,d:false,f:false,subs:[]});
+  S.open=c;save();render();
+  document.querySelector(`[data-new="${CSS.escape(c)}"]`).focus();
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-tab],[data-add],[data-del],[data-study],[data-star],[data-split],[data-addcourse],[data-rm],[data-fset],[data-clr]");
+  if(!t)return;
+  if(t.dataset.tab){S.tab=t.dataset.tab;save();render();window.scrollTo(0,0)}
+  else if(t.dataset.add)addTopic(t.dataset.add);
+  else if(t.dataset.star){const c=t.dataset.c,x=S.topics[c].find(y=>y.id===t.dataset.star);x.f=!x.f;S.open=c;save();render()}
+  else if(t.dataset.split){const c=t.dataset.split,ta=document.querySelector(`[data-syl="${CSS.escape(c)}"]`);S.syllabus[c]=ta.value;const have=(S.topics[c]=S.topics[c]||[]).map(x=>x.t.toLowerCase());
+    const lines=ta.value.split("\n").map(l=>l.replace(/[\uFFFD\u200B]/g,"").trim()).filter(Boolean),H=/^(\d+)[.)]\s+(.+)/,hasH=lines.some(l=>H.test(l));let cur=null;
+    lines.forEach(l=>{const m=l.match(H);
+      if(m){const k=m[2].slice(0,100);if(have.includes(k.toLowerCase())){cur=null}else{have.push(k.toLowerCase());cur={id:uid(),t:k,d:false,f:false,subs:[]};S.topics[c].push(cur)}}
+      else if(hasH){if(cur)cur.subs.push({id:uid(),t:l.replace(/^[-*•]\s*/,"").slice(0,140),d:false})}
+      else{const k=l.replace(/^[-*•]\s*/,"").slice(0,100);if(!have.includes(k.toLowerCase())){have.push(k.toLowerCase());S.topics[c].push({id:uid(),t:k,d:false,f:false,subs:[]})}}});
+    S.open=c;save();render()}
+  else if(t.dataset.addcourse!==undefined){const c=document.querySelector("[data-nc-code]").value.trim().toUpperCase().slice(0,20),n=document.querySelector("[data-nc-name]").value.trim().slice(0,60);
+    if(!c||COURSES.some(x=>x.c===c))return;const o={c,n:n||"Custom course",u:null,custom:true};S.extra.push(o);COURSES.push(o);S.open=c;save();render()}
+  else if(t.dataset.fset){const c=t.dataset.fset,v=document.querySelector(`[data-fnum="${CSS.escape(c)}"]`).value,set=new Set();
+    v.split(/[,\s]+/).forEach(p=>{const m=p.match(/^(\d+)(?:-(\d+))?$/);if(m){const a=+m[1],b=+(m[2]||m[1]);for(let k=Math.min(a,b);k<=Math.max(a,b)&&k<=500;k++)set.add(k)}});
+    S.topics[c].forEach((x,i)=>{x.f=set.has(i+1)});S.open=c;save();render()}
+  else if(t.dataset.clr){if(!confirm("Clear all topics in this course?"))return;S.topics[t.dataset.clr]=[];S.open=t.dataset.clr;save();render()}
+  else if(t.dataset.rm){if(!confirm("Remove this course and its topics?"))return;const c=t.dataset.rm;S.extra=S.extra.filter(x=>x.c!==c);const i=COURSES.findIndex(x=>x.c===c);if(i>-1)COURSES.splice(i,1);delete S.topics[c];delete S.syllabus[c];S.open=null;save();render()}
+  else if(t.dataset.del){const c=t.dataset.c;S.topics[c]=S.topics[c].filter(x=>x.id!==t.dataset.del);S.open=c;save();render()}
+  else if(t.dataset.study&&t.tagName==="BUTTON")toggleStudy(t.dataset.study);
+});
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.dataset.syl){S.syllabus[t.dataset.syl]=t.value;save()}
+  else if(t.dataset.study)toggleStudy(t.dataset.study);
+  else if(t.dataset.sub){const c=t.dataset.c,p=S.topics[c].find(y=>y.id===t.dataset.p),u=p.subs.find(y=>y.id===t.dataset.sub);u.d=t.checked;p.d=p.subs.every(y=>y.d);S.open=c;save();render();if(t.checked)burst()}
+  else if(t.dataset.topic){
+    const c=t.dataset.c,x=S.topics[c].find(y=>y.id===t.dataset.topic);
+    x.d=t.checked;(x.subs||[]).forEach(u=>{u.d=t.checked});S.open=c;save();render();if(x.d)burst();
+  }
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&e.target.dataset.new){e.preventDefault();addTopic(e.target.dataset.new)}
+});
+document.addEventListener("toggle",e=>{
+  const d=e.target;if(d.dataset&&d.dataset.course){if(d.open)S.open=d.dataset.course;else if(S.open===d.dataset.course)S.open=null;save()}
+},true);
+
+/* ===== Confetti ===== */
+function burst(){return;
+  if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+  const cv=document.getElementById("fx"),x=cv.getContext("2d");
+  cv.width=innerWidth;cv.height=innerHeight;
+  const ps=Array.from({length:60},()=>({x:innerWidth/2,y:innerHeight*.6,vx:(Math.random()-.5)*12,vy:-Math.random()*13-3,r:Math.random()*6+4,c:COLORS[Math.random()*6|0],a:Math.random()*6}));
+  let f=0;
+  (function go(){
+    x.clearRect(0,0,cv.width,cv.height);
+    ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.45;p.a+=.2;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/2,p.r,p.r*1.6);x.restore()});
+    if(++f<70)requestAnimationFrame(go);else x.clearRect(0,0,cv.width,cv.height);
+  })();
+}
+render();
+</script>
+</body>
+</html>
